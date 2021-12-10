@@ -1,5 +1,7 @@
 ### `solidWeb3`
- A simple, dependency minimized package for building modern dApps with SolidJS
+
+<p>A simple, dependency minimized package for building modern dApps with SolidJS</p>
+<p>PRs are highly appreciated</p>
 
 ## Projects using `solidWeb3`
 
