@@ -21,6 +21,10 @@
       "default": "./dist/index.js"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
   "files": [
     "dist"
   ],
