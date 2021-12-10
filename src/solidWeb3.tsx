@@ -1,5 +1,5 @@
 import { createStore } from "solid-js/store";
-import { Component, createContext, createEffect, createSignal, getListener, onCleanup, onError, onMount } from "solid-js";
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 import type { AbstractConnector } from '@web3-react/abstract-connector'
 import type { ConnectorUpdate } from '@web3-react/types'
@@ -92,26 +92,53 @@ export function solidWeb3(): any {
             }else{
                 console.error("getLibrary is undefined")
             }
-
             return; 
         }
 
-        try {   
+        try {
+            
             const connectorUpdate = await connector.activate().then((update) => {
                 activated = true;
                 return update;
             })
 
+            setWeb3Store({
+                connector: connector
+            })
+
             const parsedUpdate = await parseUpdate(connector, connectorUpdate)
 
-
-        }catch(e){
-
+            setWeb3Store({
+                library: getLibraryFunc()!(parsedUpdate.provider),
+                account: parsedUpdate.account,
+                chainId: parsedUpdate.chainId,
+                active: connector !== undefined && parsedUpdate !== undefined && parsedUpdate.account != undefined,
+                error: null
+            })
+        }catch(error){
+            if(onError){
+                activated && connector.deactivate()
+                onError(error as Error)
+            }else if(throwErrors){
+                activated && connector.deactivate()
+                throw error
+            }else{
+                setWeb3Store({
+                    connector: undefined,
+                    library: undefined,
+                    chainId: 0,
+                    account: undefined,
+                    active: false,
+                    error: null
+                })
+            }
         }
     }
 
     function deactivate(): void {
-
+        if(web3Store.connector){
+            web3Store.connector.deactivate()
+        }
     }
 
     return {
@@ -169,7 +196,7 @@ export const Web3Provider: Component<{getLibrary: (provider: any) => any}> = ({c
                     library: getLibraryFunc()!(parsedUpdate.provider) ,
                     chainId: parsedUpdate.chainId,
                     account: parsedUpdate.account,
-                    error: undefined
+                    error: null
                 })
             }catch(error){
                 handleError(error as Error)
@@ -188,7 +215,7 @@ export const Web3Provider: Component<{getLibrary: (provider: any) => any}> = ({c
             chainId: 0,
             account: undefined,
             active: false,
-            error: undefined
+            error: null
         })
     }
 
