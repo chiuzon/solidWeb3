@@ -3,7 +3,7 @@
 
 ## Projects using `solidWeb3`
 
-(solidjs-web3-example)[https://github.com/chiuzon/solidjs-web3-example]
+[solidjs-web3-example](https://github.com/chiuzon/solidjs-web3-example)
 
 ## Installation
 
