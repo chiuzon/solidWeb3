@@ -15,6 +15,14 @@ export class UnsupportedChainIdError extends Error {
     }
 }
 
+export class GetLibraryIsUndefinedError extends Error {
+    public constructor() {
+        super()
+        this.name = this.constructor.name
+        this.message = `getLibrary is undefined`
+    }
+}
+
 // https://github.com/NoahZinsmeister/web3-react/blob/v6/packages/core/src/normalizers.ts
 function normalizeChainId(chainId: string | number): number {
     if (typeof chainId === 'string') {
@@ -76,7 +84,26 @@ export function solidWeb3(): any {
     ): Promise<void>{
         let activated = false
 
-        try {
+        if(!getLibraryFunc()){
+            if(onError){
+                onError(new GetLibraryIsUndefinedError)
+            }else if(throwErrors){
+                throw new GetLibraryIsUndefinedError
+            }else{
+                console.error("getLibrary is undefined")
+            }
+
+            return; 
+        }
+
+        try {   
+            const connectorUpdate = await connector.activate().then((update) => {
+                activated = true;
+                return update;
+            })
+
+            const parsedUpdate = await parseUpdate(connector, connectorUpdate)
+
 
         }catch(e){
 
@@ -103,17 +130,16 @@ export const Web3Provider: Component<{getLibrary: (provider: any) => any}> = ({c
     })
 
     async function handleUpdate(update: ConnectorUpdate): Promise<void> {
-        const { error, connector } = web3Store
-
-        if(!connector){
+    
+        if(!web3Store.connector){
             throw("This should never happen, it's just so Typescript stops complaining")
         }
 
         if(!getLibraryFunc()){
-            handleError(new Error("getLibrary isn't set"))
+            handleError(new GetLibraryIsUndefinedError)
         }
 
-        if(!error){
+        if(!web3Store.error){
             const chainId = update.chainId === undefined ? undefined : normalizeChainId(update.chainId)
 
             if(chainId !== undefined 
@@ -127,7 +153,7 @@ export const Web3Provider: Component<{getLibrary: (provider: any) => any}> = ({c
                     account: null
                 })
             }else{
-                const parsedUpdate = await parseUpdate(connector, update)
+                const parsedUpdate = await parseUpdate(web3Store.connector, update)
 
                 setWeb3Store({
                     chainId: parsedUpdate.chainId,
@@ -136,7 +162,7 @@ export const Web3Provider: Component<{getLibrary: (provider: any) => any}> = ({c
             }
         }else{
             try {
-                const parsedUpdate = await parseUpdate(connector, update)
+                const parsedUpdate = await parseUpdate(web3Store.connector, update)
 
 
                 setWeb3Store({
