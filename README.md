@@ -1,4 +1,4 @@
-### `solidWeb3`
+# `solidWeb3`
 
 ---
 
