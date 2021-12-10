@@ -1,4 +1,4 @@
-import { createStore } from "solid-js/store";
+import { createStore, Store } from "solid-js/store";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 import type { AbstractConnector } from '@web3-react/abstract-connector'
@@ -75,7 +75,11 @@ const [web3Store, setWeb3Store] = createStore<IWeb3Store>({
 
 export const [getLibraryFunc, setGetLibraryFunc] = createSignal<undefined | {(provider: any) : any}>(undefined)
 
-export function solidWeb3(): any {
+export function solidWeb3(): {
+    activate: (connector: AbstractConnector, onError?: ((error: Error) => void) | undefined, throwErrors?: boolean) => Promise<void>,
+    deactivate: () => void,
+    store: Store<IWeb3Store>
+} {
 
     async function activate(
         connector: AbstractConnector,
@@ -140,11 +144,11 @@ export function solidWeb3(): any {
             web3Store.connector.deactivate()
         }
     }
-
+   
     return {
         activate,
         deactivate,
-        ...web3Store
+        store: web3Store
     }
 }
 

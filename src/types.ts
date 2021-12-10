@@ -6,5 +6,5 @@ export interface IWeb3Store {
     chainId: number,
     account: string | undefined | null,
     active: boolean,
-    error: Error | undefined
+    error: Error | undefined | null
 }
