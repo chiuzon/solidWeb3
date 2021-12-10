@@ -52,7 +52,8 @@
     "rollup-plugin-terser": "^7.0.2",
     "solid-jest": "^0.2.0",
     "solid-js": "^1.1.0",
-    "typescript": "~4.4.3"
+    "typescript": "~4.4.3",
+    "events": "^3.3.0"
   },
   "peerDependencies": {
     "solid-js": "^1.0.0"
