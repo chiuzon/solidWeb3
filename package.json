@@ -1,12 +1,12 @@
 {
-  "name": "solidweb3",
+  "name": "@chiuzon/solidweb3",
   "description": "Minimal web3 library for SolidJS",
   "author": "Chiuzon",
   "contributors": [
     "Chiuzon"
   ],
   "license": "MIT",
-  "version": "0.1.14",
+  "version": "0.0.1",
   "homepage": "https://github.com/chiuzon/solidWeb3#readme",
   "repository": {
     "type": "git",
