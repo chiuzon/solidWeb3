@@ -155,7 +155,7 @@ export function solidWeb3(): {
 export const Web3Provider: Component<{getLibrary: (provider: any) => any}> = ({children, getLibrary}) => {
     
     onMount(() => {
-        if(!getLibraryFunc){
+        if(!getLibraryFunc()){
             setGetLibraryFunc(() => getLibrary)
         }
     })
