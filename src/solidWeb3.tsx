@@ -1,11 +1,11 @@
-import { createStore, Store } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 import type { AbstractConnector } from '@web3-react/abstract-connector'
 import type { ConnectorUpdate } from '@web3-react/types'
 import { ConnectorEvent } from '@web3-react/types'
 
-import { IWeb3Store } from "./types";
+import { ISolidWeb3, IWeb3Store } from "./types";
 
 export class UnsupportedChainIdError extends Error {
     public constructor(unsupportedChainId: number, supportedChainIds?: readonly number[]) {
@@ -75,11 +75,7 @@ const [web3Store, setWeb3Store] = createStore<IWeb3Store>({
 
 export const [getLibraryFunc, setGetLibraryFunc] = createSignal<undefined | {(provider: any) : any}>(undefined)
 
-export function solidWeb3(): {
-    activate: (connector: AbstractConnector, onError?: ((error: Error) => void) | undefined, throwErrors?: boolean) => Promise<void>,
-    deactivate: () => void,
-    store: Store<IWeb3Store>
-} {
+export function solidWeb3(): ISolidWeb3 {
 
     async function activate(
         connector: AbstractConnector,
@@ -148,7 +144,13 @@ export function solidWeb3(): {
     return {
         activate,
         deactivate,
-        store: web3Store
+        
+        account: () => web3Store.account,
+        connector: () => web3Store.connector,
+        chainId: () => web3Store.chainId,
+        library: () => web3Store.library,
+        active: () => web3Store.active,
+        error: () => web3Store.error
     }
 }
 
