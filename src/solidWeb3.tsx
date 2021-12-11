@@ -5,7 +5,7 @@ import type { AbstractConnector } from '@web3-react/abstract-connector'
 import type { ConnectorUpdate } from '@web3-react/types'
 import { ConnectorEvent } from '@web3-react/types'
 
-import { ISolidWeb3, IWeb3Store } from "./types";
+import type { ISolidWeb3, IWeb3Store } from "./types";
 
 export class UnsupportedChainIdError extends Error {
     public constructor(unsupportedChainId: number, supportedChainIds?: readonly number[]) {
