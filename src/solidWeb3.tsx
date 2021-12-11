@@ -1,10 +1,9 @@
 import { createStore } from "solid-js/store";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { ConnectorEvent } from '@web3-react/types'
 
 import type { AbstractConnector } from '@web3-react/abstract-connector'
 import type { ConnectorUpdate } from '@web3-react/types'
-import { ConnectorEvent } from '@web3-react/types'
-
 import type { ISolidWeb3, IWeb3Store } from "./types";
 
 export class UnsupportedChainIdError extends Error {
